@@ -1,0 +1,8 @@
+name: GrowingWorld
+version: ${project.version}
+main: io.github.thesummergrinch.growingworld.GrowingWorld
+api-version: 1.16
+softdepend: [ Multiverse-Core, Multiverse-NetherPortals ]
+authors: [ TheSummerGrinch ]
+description: A Plugin that sets the worldborder to 10 at the start of the world, and gradually expands it as players get achievements.
+website: https://www.github.com/TheSummerGrinch
