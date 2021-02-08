@@ -1,5 +1,5 @@
 name: GrowingWorld
-version: 1.0.1
+version: 1.0.0
 main: io.github.thesummergrinch.growingworld.GrowingWorld
 api-version: 1.16
 softdepend: [ Multiverse-Core, Multiverse-NetherPortals ]
