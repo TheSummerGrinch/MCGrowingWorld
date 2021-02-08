@@ -45,11 +45,13 @@ public class WorldBorderController {
 
     public void startPeriodicallyExpanding() {
         this.isPeriodicallyExpanding.set(true);
+        Settings.getInstance().setSetting("is-worldborder-expanding", "true");
         startGrowthRunnable();
     }
 
     public void stopPeriodicallyExpanding() {
         this.isPeriodicallyExpanding.set(false);
+        Settings.getInstance().setSetting("is-worldborder-expanding", "false");
     }
 
     private void startGrowthRunnable() {

@@ -1,6 +1,7 @@
 package io.github.thesummergrinch.growingworld.config;
 
 import io.github.thesummergrinch.growingworld.GrowingWorld;
+import io.github.thesummergrinch.growingworld.worldborder.WorldBorderController;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
@@ -45,6 +46,8 @@ public class FileConfigurationLoader {
                 put("first-run", "true");
                 put("starting-size", "10.0");
                 put("config-version", "1");
+                put("allow-recipe-advancements", "false");
+                put("is-worldborder-expanding", "false");
 
             }
         };
@@ -61,10 +64,12 @@ public class FileConfigurationLoader {
         Settings settings = this.fileConfiguration.getObject("settings",
                 Settings.class);
 
-        if (settings != null) return settings;
+        if (settings == null) {
 
-        settings = Settings.getInstance();
-        settings.setSettings(getDefaultSettings());
+            settings = Settings.getInstance();
+            settings.setSettings(getDefaultSettings());
+
+        }
 
         // Auto-updater for config.yml
         if (!settings.containsKey("config-version")
@@ -82,6 +87,13 @@ public class FileConfigurationLoader {
                 }
 
             });
+            settings.setSetting("config-version", getDefaultSettings().get(
+                    "config-version"));
+        }
+
+        if (Boolean.parseBoolean(Settings.getInstance().getSetting("is" +
+                "-worldborder-expanding"))) {
+            WorldBorderController.getInstance().startPeriodicallyExpanding();
         }
 
         return Settings.getInstance();

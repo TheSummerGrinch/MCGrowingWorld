@@ -1,6 +1,7 @@
 package io.github.thesummergrinch.growingworld;
 
 import io.github.thesummergrinch.growingworld.commands.ClearAdvancementsCommandExecutor;
+import io.github.thesummergrinch.growingworld.commands.SetAllowRecipeAdvancementsCommandExecutor;
 import io.github.thesummergrinch.growingworld.commands.ShrinkWorldBorderCommandExecutor;
 import io.github.thesummergrinch.growingworld.commands.StartWorldBorderExpandingCommandExecutor;
 import io.github.thesummergrinch.growingworld.commands.StopWorldBorderExpandingCommandExecutor;
@@ -48,6 +49,8 @@ public final class GrowingWorld extends JavaPlugin {
                 .setExecutor(new StopWorldBorderExpandingCommandExecutor());
         this.getCommand("shrinkworldborder")
                 .setExecutor(new ShrinkWorldBorderCommandExecutor());
+        this.getCommand("setallowrecipeadvancements")
+                .setExecutor(new SetAllowRecipeAdvancementsCommandExecutor());
 
     }
 
