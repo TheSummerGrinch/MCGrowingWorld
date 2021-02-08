@@ -45,7 +45,7 @@ public class FileConfigurationLoader {
                 put("allow-metrics", "true");
                 put("first-run", "true");
                 put("starting-size", "10.0");
-                put("config-version", "3");
+                put("config-version", "1");
                 put("allow-recipe-advancements", "false");
                 put("is-worldborder-expanding", "false");
 
