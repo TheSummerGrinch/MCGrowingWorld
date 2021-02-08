@@ -48,6 +48,8 @@ public final class GrowingWorld extends JavaPlugin {
                 .setExecutor(new StopWorldBorderExpandingCommandExecutor());
         this.getCommand("shrinkworldborder")
                 .setExecutor(new ShrinkWorldBorderCommandExecutor());
+        this.getCommand("setallowrecipeadvancements")
+                .setExecutor(new SetAllowRecipeAdvancementsCommandExecutor());
 
     }
 
