@@ -39,7 +39,7 @@ commands:
     permission: growingworld.stop
     aliases: [ gwstop ]
   shrinkworldborder:
-    usage: /shrinkworldborder
+    usage: /shrinkworldborder {overworld_name, nether_name, the_end_name, etc.}
     description: Shrinks the WorldBorder to the specified size, or to the starting-size specified in the config.yml.
     permission: growingworld.shrink
     aliases: [ gwshrink ]
