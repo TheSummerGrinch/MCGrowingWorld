@@ -112,3 +112,14 @@ buildNumber.properties
 # Common working directory
 run/
 /.idea/
+.idea/libraries/Maven__org_bstats_bstats_bukkit_1_8.xml
+.idea/libraries/Maven__org_jetbrains_annotations_20_1_0.xml
+.idea/libraries/Maven__org_spigotmc_spigot_api_1_16_1_R0_1_SNAPSHOT.xml
+target/classes/plugin.yml
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+.idea/jarRepositories.xml
+.idea/libraries/Maven__org_bstats_bstats_bukkit_1_8.xml
+.idea/libraries/Maven__org_jetbrains_annotations_20_1_0.xml
+.idea/libraries/Maven__org_spigotmc_spigot_api_1_16_1_R0_1_SNAPSHOT.xml
