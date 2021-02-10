@@ -6,7 +6,7 @@
 
     <groupId>io.github.thesummergrinch</groupId>
     <artifactId>GrowingWorld</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>GrowingWorld</name>
