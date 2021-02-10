@@ -1,3 +1,4 @@
+io\github\thesummergrinch\growingworld\UpdateChecker.class
 io\github\thesummergrinch\growingworld\commands\ShrinkWorldBorderCommandExecutor.class
 io\github\thesummergrinch\growingworld\config\Settings.class
 io\github\thesummergrinch\growingworld\listeners\OnPlayerAdvancementDoneEventHandler.class

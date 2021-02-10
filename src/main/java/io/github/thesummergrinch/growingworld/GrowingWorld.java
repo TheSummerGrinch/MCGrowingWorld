@@ -28,6 +28,7 @@ public final class GrowingWorld extends JavaPlugin {
         registerCommands();
         registerEventHandlers();
         enableMetrics();
+        checkForUpdate();
 
     }
 
@@ -86,6 +87,38 @@ public final class GrowingWorld extends JavaPlugin {
             //getLogger().log(Level.INFO, LanguageFileLoader
                     //.getInstance().getString("metrics-disabled"));
 
+        }
+    }
+
+    private void checkForUpdate() {
+        if (Boolean.parseBoolean(Settings.getInstance().getSetting("enable" +
+                "-update-checking"))) {
+            new UpdateChecker(this, 88787).getVersion(version -> {
+                String[] publishedVersion = version.split("\\.");
+                String[] currentVersion = this.getDescription().getVersion().split("\\.");
+                if (publishedVersion.length == currentVersion.length) {
+                    for (int i = 0; i < publishedVersion.length; i++) {
+                        if (Integer.parseInt(publishedVersion[i]) > Integer.parseInt(currentVersion[i])) {
+                            getLogger().warning("A new version is available: " + version);
+                            return;
+                        }
+                    }
+                } else if (publishedVersion.length < (currentVersion).length) {
+                    for (int i = 0; i < publishedVersion.length; i++) {
+                        if (Integer.parseInt(publishedVersion[i]) > Integer.parseInt(currentVersion[i])) {
+                            getLogger().warning("A new version is available: " + version);
+                            return;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < currentVersion.length; i++) {
+                        if (Integer.parseInt(publishedVersion[i]) > Integer.parseInt(currentVersion[i])) {
+                            getLogger().warning("A new version is available: " + version);
+                            return;
+                        }
+                    }
+                }
+            });
         }
     }
 
