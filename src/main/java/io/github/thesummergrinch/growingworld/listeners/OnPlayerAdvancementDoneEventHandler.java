@@ -12,7 +12,7 @@ public class OnPlayerAdvancementDoneEventHandler implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerAdvancementDoneEvent(final PlayerAdvancementDoneEvent event) {
         if (!event.getAdvancement().getKey().getKey().substring(0, 8)
-                .equals("recipes/") && !Boolean.parseBoolean(Settings.getInstance()
+                .equals("recipes/") || Boolean.parseBoolean(Settings.getInstance()
                 .getSetting("allow-recipe-advancements"))) {
             WorldBorderController.getInstance().growWorldBorder();
         }
