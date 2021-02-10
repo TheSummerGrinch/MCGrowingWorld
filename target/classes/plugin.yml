@@ -1,0 +1,50 @@
+name: GrowingWorld
+version: 1.0.2
+main: io.github.thesummergrinch.growingworld.GrowingWorld
+api-version: 1.16
+# softdepend: [ Multiverse-Core, Multiverse-NetherPortals ]
+authors: [ TheSummerGrinch ]
+description: A Plugin that sets the worldborder to 10 at the start of the world, and gradually expands it as players get achievements.
+website: https://www.github.com/TheSummerGrinch
+permissions:
+  growingworld.clear:
+    description: Allows the holder to clear the advancements of players.
+    default: op
+  growingworld.start:
+    description: Allows the holder to start the process of expanding the WorldBorder periodically.
+    default: op
+  growingworld.stop:
+    description: Allows the holder to stop the process of expanding the WorldBorder periodically.
+    default: op
+  growingworld.shrink:
+    description: Allows the holder to shrink the WorldBorder.
+    default: op
+  growingworld.advancement.recipes:
+    description: Allows the holder to set whether or not recipe advancements should count towards growing the worldborder.
+    default: op
+commands:
+  clearadvancements:
+    usage: /clearadvancements
+    description: Clears the advancements of the specified player(s).
+    permission: growingworld.clear
+    aliases: [ gwca ]
+  startworldborderexpanding:
+    usage: /startworldborderexpanding
+    description: Starts the Runnable to allow the WorldBorder to expand periodically.
+    permission: growingworld.start
+    aliases: [ gwstart ]
+  stopworldborderexpanding:
+    usage: /stopworldborderexpanding
+    description: Stops the Runnable responsible for the periodic expanding of the WorldBorder. Can be started again.
+    permission: growingworld.stop
+    aliases: [ gwstop ]
+  shrinkworldborder:
+    usage: /shrinkworldborder {overworld_name, nether_name, the_end_name, etc.}
+    description: Shrinks the WorldBorder to the specified size, or to the starting-size specified in the config.yml.
+    permission: growingworld.shrink
+    aliases: [ gwshrink ]
+  setallowrecipeadvancements:
+    usage: /setallowrecipeadvancements or /gwrecipes
+    description: Allows the user to set whether or not recipe advancements should count towards growing the worldborder.
+    permission: growingworld.advancement.recipes
+    aliases: [ gwrecipes ]
