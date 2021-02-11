@@ -48,6 +48,41 @@ public class WorldBorderController {
         }
     }
 
+    public void growOnAdvancement(final Advancement advancement) {
+        final boolean isRecipeAdvancement =
+                advancement.getKey().getKey().startsWith("recipes/");
+        final boolean allowRecipeAdvancements =
+                Boolean.parseBoolean(Settings.getInstance().getSetting("allow" +
+                        "-recipe-advancements"));
+        if (allowRecipeAdvancements || !isRecipeAdvancement) {
+            final int growth =
+                    (isRecipeAdvancement)
+                            // random(maxRecipe - minRecipe) + minRecipe
+                            ? random.nextInt(Integer.parseInt(
+                            Settings.getInstance()
+                                    .getSetting("max-recipe-growth"))
+                            - Integer.parseInt(Settings.getInstance()
+                            .getSetting("min-recipe-growth"))
+                            + Integer.parseInt(Settings.getInstance()
+                            .getSetting("min-recipe-growth")))
+
+                            // random(maxAdvancement - minAdvancement) +
+                            // minAdvancement
+                            : random.nextInt(Integer.parseInt(
+                            Settings.getInstance()
+                                    .getSetting("max-advancement" +
+                                            "-growth"))
+                            - Integer.parseInt(Settings.getInstance()
+                            .getSetting("min-advancement-growth"))
+                            + Integer.parseInt(Settings.getInstance()
+                            .getSetting("min-advancement-growth")));
+            Bukkit.getWorlds().forEach(world -> {
+                world.getWorldBorder().setSize(world.getWorldBorder().getSize()
+                        + growth); //TODO replace with specific worlds.
+            });
+        }
+    }
+
         Bukkit.getWorlds().forEach(world -> {
             world.getWorldBorder().setSize(world.getWorldBorder().getSize() + finalGrowth);
         });
