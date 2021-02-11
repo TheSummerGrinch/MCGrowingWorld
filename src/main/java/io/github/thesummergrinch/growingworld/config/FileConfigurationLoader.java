@@ -40,12 +40,16 @@ public class FileConfigurationLoader {
             {
 
                 put("growth-interval-in-minutes", "2");
-                put("min-growth", "1");
-                put("max-growth", "2");
+                put("min-advancement-growth", "1");
+                put("max-advancement-growth", "2");
+                put("min-recipe-growth", "1");
+                put("max-recipe-growth", "2");
+                put("min-passive-growth", "1");
+                put("max-passive-growth", "2");
                 put("allow-metrics", "true");
                 put("first-run", "true");
                 put("starting-size", "10.0");
-                put("config-version", "2");
+                put("config-version", "3");
                 put("allow-recipe-advancements", "false");
                 put("is-worldborder-expanding", "false");
                 put("enable-update-checking", "true");
