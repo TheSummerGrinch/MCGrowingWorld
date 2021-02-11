@@ -83,8 +83,19 @@ public class WorldBorderController {
         }
     }
 
+    private void growPassively() {
+        // random(maxPassive - minPassive) + minPassive
+        final int growth = random.nextInt(
+                Integer.parseInt(Settings.getInstance()
+                        .getSetting("max-passive-growth"))
+                - Integer.parseInt(Settings.getInstance().getSetting("min" +
+                        "-passive-growth"))
+        ) + Integer.parseInt(Settings.getInstance().getSetting("min-passive" +
+                "-growth"));
+
         Bukkit.getWorlds().forEach(world -> {
-            world.getWorldBorder().setSize(world.getWorldBorder().getSize() + finalGrowth);
+            world.getWorldBorder().setSize(world.getWorldBorder().getSize()
+                    + growth);
         });
     }
 
