@@ -29,15 +29,25 @@ public class WorldBorderController {
         return instance;
     }
 
-    public void growWorldBorder() {
-        int growth = random.nextInt(Integer.parseInt(Settings.getInstance().getSetting(
-                "max" +
-                        "-growth")));
-        if (growth < Integer.parseInt(Settings.getInstance().getSetting("min" +
-                "-growth"))) growth =
-                Integer.parseInt(Settings.getInstance().getSetting("min" +
-                        "-growth"));
-        int finalGrowth = growth;
+    @Deprecated
+    public void growWorldBorder(final Advancement advancement) {
+        if (!advancement.getKey().getKey()
+                .startsWith("recipes/") || Boolean.parseBoolean(Settings.getInstance()
+                .getSetting("allow-recipe-advancements"))) {
+            int growth = random.nextInt(Integer.parseInt(Settings.getInstance().getSetting(
+                    "max" +
+                            "-growth")));
+            if (growth < Integer.parseInt(Settings.getInstance().getSetting("min" +
+                    "-growth"))) growth =
+                    Integer.parseInt(Settings.getInstance().getSetting("min" +
+                            "-growth"));
+            int finalGrowth = growth;
+            Bukkit.getWorlds().forEach(world -> {
+                world.getWorldBorder().setSize(world.getWorldBorder().getSize() + finalGrowth);
+            });
+        }
+    }
+
         Bukkit.getWorlds().forEach(world -> {
             world.getWorldBorder().setSize(world.getWorldBorder().getSize() + finalGrowth);
         });
