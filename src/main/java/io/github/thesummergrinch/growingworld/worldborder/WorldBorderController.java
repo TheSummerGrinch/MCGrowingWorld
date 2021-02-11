@@ -3,6 +3,7 @@ package io.github.thesummergrinch.growingworld.worldborder;
 import io.github.thesummergrinch.growingworld.GrowingWorld;
 import io.github.thesummergrinch.growingworld.config.Settings;
 import org.bukkit.Bukkit;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -115,13 +116,13 @@ public class WorldBorderController {
             @Override
             public void run() {
                 if (!isPeriodicallyExpanding.get()) return;
-                growWorldBorder();
+                growPassively();
                 startGrowthRunnable();
             }
         }.runTaskLater(GrowingWorld.getPlugin(GrowingWorld.class),
                 Long.parseLong(Settings.getInstance().getSetting(
-                "growth" +
-                        "-interval-in-minutes")) * 60L * 20L);
+                        "growth" +
+                                "-interval-in-minutes")) * 60L * 20L);
     }
 
     public void setWorldBorderSize(final double newSize) {
