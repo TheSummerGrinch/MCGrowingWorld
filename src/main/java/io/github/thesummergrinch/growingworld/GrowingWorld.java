@@ -5,26 +5,23 @@ import io.github.thesummergrinch.growingworld.commands.SetAllowRecipeAdvancement
 import io.github.thesummergrinch.growingworld.commands.ShrinkWorldBorderCommandExecutor;
 import io.github.thesummergrinch.growingworld.commands.StartWorldBorderExpandingCommandExecutor;
 import io.github.thesummergrinch.growingworld.commands.StopWorldBorderExpandingCommandExecutor;
-import io.github.thesummergrinch.growingworld.config.FileConfigurationLoader;
-import io.github.thesummergrinch.growingworld.config.Settings;
 import io.github.thesummergrinch.growingworld.listeners.OnPlayerAdvancementDoneEventHandler;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class GrowingWorld extends JavaPlugin {
 
-    static {
-
-        ConfigurationSerialization.registerClass(Settings.class);
-
-    }
+    private FileConfiguration fileConfiguration;
 
     @Override
     public void onEnable() {
 
-        FileConfigurationLoader.getInstance().loadSettings();
-        saveConfig();
+        this.saveDefaultConfig();
+        this.getConfig().options().copyDefaults(true);
+        this.saveConfig();
+        this.fileConfiguration = this.getConfig();
+
         registerCommands();
         registerEventHandlers();
         enableMetrics();
@@ -35,7 +32,6 @@ public final class GrowingWorld extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        FileConfigurationLoader.getInstance().saveSettings();
         this.saveConfig();
 
     }
@@ -49,9 +45,9 @@ public final class GrowingWorld extends JavaPlugin {
         this.getCommand("stopworldborderexpanding")
                 .setExecutor(new StopWorldBorderExpandingCommandExecutor());
         this.getCommand("shrinkworldborder")
-                .setExecutor(new ShrinkWorldBorderCommandExecutor());
+                .setExecutor(new ShrinkWorldBorderCommandExecutor(this.fileConfiguration));
         this.getCommand("setallowrecipeadvancements")
-                .setExecutor(new SetAllowRecipeAdvancementsCommandExecutor());
+                .setExecutor(new SetAllowRecipeAdvancementsCommandExecutor(this.fileConfiguration));
 
     }
 
@@ -64,35 +60,26 @@ public final class GrowingWorld extends JavaPlugin {
 
     private void enableMetrics() {
         //TODO add localization.
-        if (Settings.getInstance().getSetting("first-run").equals("true")) {
+        if (this.fileConfiguration.getBoolean("first-run")) {
 
-            Settings.getInstance().setSetting("first-run", "false");
+            this.fileConfiguration.set("first-run", false);
             getLogger().info("Metrics will be enabled on the next start.");
-            //getLogger().log(Level.INFO,
-                    //LanguageFileLoader.getInstance().getString("metrics" +
-                    //"-enabled-on-next-launch"));
 
-        } else if (Settings.getInstance().getSetting("allow-metrics").equals("true")) {
+        } else if (this.fileConfiguration.getBoolean("allow-metrics")) {
 
             final int pluginID = 10258;
             new Metrics(this, pluginID);
             getLogger().info("Metrics enabled.");
-            //getLogger().log(Level.INFO,
-                    //LanguageFileLoader.getInstance().getString("metrics" +
-                    //"-enabled"));
 
         } else {
 
             getLogger().info("Metrics disabled.");
-            //getLogger().log(Level.INFO, LanguageFileLoader
-                    //.getInstance().getString("metrics-disabled"));
 
         }
     }
 
     private void checkForUpdate() {
-        if (Boolean.parseBoolean(Settings.getInstance().getSetting("enable" +
-                "-update-checking"))) {
+        if (this.fileConfiguration.getBoolean("enable-update-checking")) {
             new UpdateChecker(this, 88787).getVersion(version -> {
                 String[] publishedVersion = version.split("\\.");
                 String[] currentVersion = this.getDescription().getVersion().split("\\.");
@@ -122,6 +109,8 @@ public final class GrowingWorld extends JavaPlugin {
         }
     }
 
-
+    public FileConfiguration getFileConfiguration() {
+        return this.fileConfiguration;
+    }
 
 }
