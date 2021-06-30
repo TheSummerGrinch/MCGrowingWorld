@@ -1,9 +1,9 @@
 package io.github.thesummergrinch.growingworld.worldborder;
 
 import io.github.thesummergrinch.growingworld.GrowingWorld;
-import io.github.thesummergrinch.growingworld.config.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -16,7 +16,12 @@ public class WorldBorderController {
     private final Random random;
     private final AtomicBoolean isPeriodicallyExpanding;
 
+    private final GrowingWorld plugin;
+    private final FileConfiguration fileConfiguration;
+
     private WorldBorderController() {
+        this.plugin = GrowingWorld.getPlugin(GrowingWorld.class);
+        this.fileConfiguration = this.plugin.getFileConfiguration();
         this.random = new Random();
         this.isPeriodicallyExpanding = new AtomicBoolean(false);
     }
@@ -33,82 +38,81 @@ public class WorldBorderController {
     @Deprecated
     public void growWorldBorder(final Advancement advancement) {
         if (!advancement.getKey().getKey()
-                .startsWith("recipes/") || Boolean.parseBoolean(Settings.getInstance()
-                .getSetting("allow-recipe-advancements"))) {
-            int growth = random.nextInt(Integer.parseInt(Settings.getInstance().getSetting(
-                    "max" +
-                            "-growth")));
-            if (growth < Integer.parseInt(Settings.getInstance().getSetting("min" +
-                    "-growth"))) growth =
-                    Integer.parseInt(Settings.getInstance().getSetting("min" +
-                            "-growth"));
+                .startsWith("recipes/") || this.fileConfiguration
+                .getBoolean("allow-recipe-advancements")) {
+            int growth = random.nextInt(this.fileConfiguration.getInt(
+                    "max-growth"));
+            if (growth < this.fileConfiguration.getInt("min-growth"))
+                growth = this.fileConfiguration.getInt("min-growth");
             int finalGrowth = growth;
-            Bukkit.getWorlds().forEach(world -> {
-                world.getWorldBorder().setSize(world.getWorldBorder().getSize() + finalGrowth);
-            });
+            Bukkit.getWorlds().forEach(world -> world.getWorldBorder()
+                    .setSize(world.getWorldBorder().getSize() + finalGrowth));
         }
     }
 
     public void growOnAdvancement(final Advancement advancement) {
+
         final boolean isRecipeAdvancement =
                 advancement.getKey().getKey().startsWith("recipes/");
+
         final boolean allowRecipeAdvancements =
-                Boolean.parseBoolean(Settings.getInstance().getSetting("allow" +
-                        "-recipe-advancements"));
+                this.fileConfiguration.getBoolean("allow-recipe-advancements");
+
         if (allowRecipeAdvancements || !isRecipeAdvancement) {
-            final int growth =
-                    (isRecipeAdvancement)
-                            // random(maxRecipe - minRecipe) + minRecipe
-                            ? random.nextInt(Integer.parseInt(
-                            Settings.getInstance()
-                                    .getSetting("max-recipe-growth"))
-                            - Integer.parseInt(Settings.getInstance()
-                            .getSetting("min-recipe-growth"))
-                            + Integer.parseInt(Settings.getInstance()
-                            .getSetting("min-recipe-growth")))
+
+            int growth = (isRecipeAdvancement)
+                    // Looking at this code months later, thank goodness for the formula.
+                    // random(maxRecipe - minRecipe) + minRecipe
+                            ? random.nextInt(this.fileConfiguration.getInt("max-recipe-growth")
+                            - this.fileConfiguration.getInt("min-recipe-growth"))
+                            + this.fileConfiguration.getInt("min-recipe-growth")
 
                             // random(maxAdvancement - minAdvancement) +
                             // minAdvancement
-                            : random.nextInt(Integer.parseInt(
-                            Settings.getInstance()
-                                    .getSetting("max-advancement" +
-                                            "-growth"))
-                            - Integer.parseInt(Settings.getInstance()
-                            .getSetting("min-advancement-growth"))
-                            + Integer.parseInt(Settings.getInstance()
-                            .getSetting("min-advancement-growth")));
+                            : random.nextInt(this.fileConfiguration.getInt("max-advancement-growth")
+                            - this.fileConfiguration.getInt("min-advancement-growth"))
+                            + this.fileConfiguration.getInt("min-advancement-growth");
+
+            if (isRecipeAdvancement
+                    && growth < this.fileConfiguration.getInt("min-recipe-growth")) {
+
+                growth = this.fileConfiguration.getInt("min-recipe-growth");
+
+            } else if (!isRecipeAdvancement
+                    && growth < this.fileConfiguration.getInt("min-advancement-growth")) {
+
+                growth = this.fileConfiguration.getInt("min-advancement-growth");
+
+            }
+            int finalGrowth = growth;
             Bukkit.getWorlds().forEach(world -> {
                 world.getWorldBorder().setSize(world.getWorldBorder().getSize()
-                        + growth); //TODO replace with specific worlds.
+                        + finalGrowth); //TODO replace with specific worlds.
             });
         }
     }
 
     private void growPassively() {
         // random(maxPassive - minPassive) + minPassive
-        final int growth = random.nextInt(
-                Integer.parseInt(Settings.getInstance()
-                        .getSetting("max-passive-growth"))
-                - Integer.parseInt(Settings.getInstance().getSetting("min" +
-                        "-passive-growth"))
-        ) + Integer.parseInt(Settings.getInstance().getSetting("min-passive" +
-                "-growth"));
-
-        Bukkit.getWorlds().forEach(world -> {
-            world.getWorldBorder().setSize(world.getWorldBorder().getSize()
-                    + growth);
-        });
+        int growth = random.nextInt(
+                this.fileConfiguration.getInt("max-passive-growth")
+                - this.fileConfiguration.getInt("min-passive-growth")
+                        + this.fileConfiguration.getInt("min-passive-growth"));
+        int finalGrowth =
+                Math.max(growth, this.fileConfiguration.getInt("min-passive-growth"));
+        Bukkit.getWorlds().forEach(world -> world.getWorldBorder().setSize(world.getWorldBorder().getSize()
+                + finalGrowth));
     }
 
     public void startPeriodicallyExpanding() {
         this.isPeriodicallyExpanding.set(true);
-        Settings.getInstance().setSetting("is-worldborder-expanding", "true");
+        this.fileConfiguration.set("is-worldborder-expanding", true);
         startGrowthRunnable();
     }
 
     public void stopPeriodicallyExpanding() {
         this.isPeriodicallyExpanding.set(false);
-        Settings.getInstance().setSetting("is-worldborder-expanding", "false");
+        this.fileConfiguration.set("is-worldborder-expanding", false);
     }
 
     private void startGrowthRunnable() {
@@ -120,9 +124,7 @@ public class WorldBorderController {
                 startGrowthRunnable();
             }
         }.runTaskLater(GrowingWorld.getPlugin(GrowingWorld.class),
-                Long.parseLong(Settings.getInstance().getSetting(
-                        "growth" +
-                                "-interval-in-minutes")) * 60L * 20L);
+                fileConfiguration.getLong("growth-interval-in-minutes") * 60L * 20L);
     }
 
     public void setWorldBorderSize(final double newSize) {
