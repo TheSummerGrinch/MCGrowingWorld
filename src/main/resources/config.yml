@@ -1,0 +1,67 @@
+# Default config for GrowingWorld
+# Author: TheSummerGrinch
+# Website: https://www.github.com/TheSummerGrinch
+# Support at https://www.github.com/TheSummerGrinch or via Discord (GrinchDev#6592)
+
+# Sets the interval for passive world-border growth.
+growth-interval-in-minutes: 2
+
+# Sets the minimal world-border growth per advancement.
+min-advancement-growth: 1
+
+# Sets the maximum world-border growth per advancement.
+max-advancement-growth: 2
+
+# Sets the minimum world-border growth per unlocked recipe.
+min-recipe-growth: 1
+
+# Sets the maximum world-border growth per unlocked recipe.
+max-recipe-growth: 2
+
+# Sets the minimum passive growth per interval.
+min-passive-growth: 1
+
+# Sets the maximum passive growth per interval.
+max-passive-growth: 2
+
+# Sets whether or not to allow metrics, through bStats.
+allow-metrics: true
+
+# Used to determine whether or not metrics should be disabled by default. Metrics
+# are always disabled on the first run, to give the user the opportunity to
+# generate the config.yml and set whether or not metrics should be allowed.
+first-run: true
+
+# Sets the starting size of the world-border.
+starting-size: 10.0
+
+# Deprecated
+config-version: 4
+
+# Sets whether or not to consider recipe advancements as advancements. Set to
+# false by default, as it may lead to the world-border expanding by several dozen
+# blocks whenever a player picks up a new item.
+allow-recipe-advancements: false
+
+# Used to determine whether or not the passive world-border growth should be started
+# when the server restarts.
+is-worldborder-expanding: false
+
+# Sets whether or not to check SpigotMC for an update.
+enable-update-checking: true
+
+# Set the name of the overworld that is to be used for the shrink-command. Typically
+# the name is simply 'world', however, server providers such as ShockByte often use
+# non-default names. You can find the name of your overworld, nether and end in the
+# server folder.
+#
+# The overworld-folder looks like this: basename
+# The nether-folder should look like this: basename_nether
+# The end-folder should look like this: basename_the_end
+#
+# Simply enter the name of the respective folders below.
+# overworld-name: world
+#
+# nether-name: world_nether
+#
+# end-name: world_the_end
