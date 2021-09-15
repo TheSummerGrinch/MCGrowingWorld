@@ -1,10 +1,6 @@
 package io.github.thesummergrinch.growingworld;
 
-import io.github.thesummergrinch.growingworld.commands.ClearAdvancementsCommandExecutor;
-import io.github.thesummergrinch.growingworld.commands.SetAllowRecipeAdvancementsCommandExecutor;
-import io.github.thesummergrinch.growingworld.commands.ShrinkWorldBorderCommandExecutor;
-import io.github.thesummergrinch.growingworld.commands.StartWorldBorderExpandingCommandExecutor;
-import io.github.thesummergrinch.growingworld.commands.StopWorldBorderExpandingCommandExecutor;
+import io.github.thesummergrinch.growingworld.commands.*;
 import io.github.thesummergrinch.growingworld.listeners.OnPlayerAdvancementDoneEventHandler;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -48,6 +44,8 @@ public final class GrowingWorld extends JavaPlugin {
                 .setExecutor(new ShrinkWorldBorderCommandExecutor(this.fileConfiguration));
         this.getCommand("setallowrecipeadvancements")
                 .setExecutor(new SetAllowRecipeAdvancementsCommandExecutor(this.fileConfiguration));
+        this.getCommand("setallowduplicateadvancements")
+                .setExecutor(new SetAllowDuplicateAdvancementsCommandExecutor(this.fileConfiguration));
 
     }
 
