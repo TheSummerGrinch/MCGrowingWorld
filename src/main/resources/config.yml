@@ -43,6 +43,12 @@ config-version: 4
 # blocks whenever a player picks up a new item.
 allow-recipe-advancements: false
 
+# Sets whether or not to count duplicate advancements between players on the server.
+# E.g. if two players have the advancement 'Stone Age' it will be counted both times,
+# but with this option off it would only count as one.
+# Set to true by default.
+allow-duplicate-advancements: true
+
 # Used to determine whether or not the passive world-border growth should be started
 # when the server restarts.
 is-worldborder-expanding: false

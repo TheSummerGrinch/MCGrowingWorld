@@ -3,9 +3,14 @@ package io.github.thesummergrinch.growingworld.worldborder;
 import io.github.thesummergrinch.growingworld.GrowingWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.entity.Player;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -57,6 +62,24 @@ public class WorldBorderController {
 
         final boolean allowRecipeAdvancements =
                 this.fileConfiguration.getBoolean("allow-recipe-advancements");
+
+        final boolean allowDuplicateAdvancements =
+                this.fileConfiguration.getBoolean("allow-duplicate-advancements");
+
+        // Return early if duplicate advancements aren't allowed and this advancement is a duplicate.
+        if (!allowDuplicateAdvancements) {
+            // Get the unique advancements of all players.
+            Set<Advancement> uniqueAdvancements = new HashSet<>();
+            Iterator<Advancement> serverAdvancements = Bukkit.getServer().advancementIterator();
+            while (serverAdvancements.hasNext()) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    AdvancementProgress progress = player.getAdvancementProgress(serverAdvancements.next());
+                    if (progress.isDone()) uniqueAdvancements.add(progress.getAdvancement());
+                }
+            }
+
+            if (uniqueAdvancements.contains(advancement)) return;
+        }
 
         if (allowRecipeAdvancements || !isRecipeAdvancement) {
 
